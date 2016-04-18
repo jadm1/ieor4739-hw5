@@ -5,30 +5,35 @@ GCCDEB = gcc -ggdb -Wall -pedantic
 #CCC = $(GCCOPT)
 CCC = $(GCCDEB)
 
-CFLAGS = 
+#GRB = /opt/gurobi/gurobi650/linux64
+GRB = /mnt/sda5/gurobi651/linux64
 
+GRBINCDIR = $(GRB)/include
+GRBLIBDIR = $(GRB)/lib
 
-CCCLNFLAGS = $(LIBS)
-CCCFLAGS = 
+LIBS = -lm -lpthread -lgurobi65
+
+CCCFLAGS = -I $(GRBINCDIR)
+CCCLNFLAGS = -L $(GRBLIBDIR) $(LIBS)
+
 
 BDIR = bin
 ODIR = obj
 
+ROB = $(BDIR)/rob
+ROB_OBJ = $(ODIR)/robust.o $(ODIR)/robustmain.o
 
-PROG = $(BDIR)/prog
-PROG_OBJ = $(ODIR)/prog.o
 
-
-all: $(PROG)
+all: $(ROB)
 
 $(ODIR)/%.o: src/%.c
 	@echo compiling $*.c with $(CCC) $(CCCFLAGS)
 	@$(CCC) $(CCCFLAGS) -c $< -o $@
 
-$(PROG): $(PROG_OBJ)
-	$(CCC) $(CCCFLAGS) -o $(PROG) $(PROG_OBJ) $(CCCLNFLAGS)
+$(ROB): $(ROB_OBJ)
+	$(CCC) -o $(ROB) $(ROB_OBJ) $(CCCLNFLAGS)
 
 clean:
-	rm $(PROG) -f
+	rm $(ROB) -f
 	rm $(ODIR)/* -f
 
