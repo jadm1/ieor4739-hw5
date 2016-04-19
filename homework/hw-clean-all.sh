@@ -9,5 +9,5 @@ rm -f data/f.txt
 rm -f data/q.txt
 rm -f data/d.txt
 rm -f data/input_rob.txt
-
+rm -f data/x.txt
 

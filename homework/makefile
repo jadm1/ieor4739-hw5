@@ -1,6 +1,6 @@
 
 GCCOPT = gcc -O2 -funroll-loops
-GCCDEB = gcc -ggdb -Wall -pedantic
+GCCDEB = gcc -ggdb -Wall #-pedantic
 
 #CCC = $(GCCOPT)
 CCC = $(GCCDEB)
@@ -13,8 +13,11 @@ GRBLIBDIR = $(GRB)/lib
 
 LIBS = -lm -lpthread -lgurobi65
 
-CCCFLAGS = -I $(GRBINCDIR)
-CCCLNFLAGS = -L $(GRBLIBDIR) $(LIBS)
+GRBCFLAGS = -I $(GRBINCDIR)
+GRBLNFLAGS = -L $(GRBLIBDIR) $(LIBS)
+
+CCCFLAGS = $(GRBCFLAGS)
+CCCLNFLAGS = $(GRBLNFLAGS)
 
 
 BDIR = bin
@@ -23,8 +26,13 @@ ODIR = obj
 ROB = $(BDIR)/rob
 ROB_OBJ = $(ODIR)/robust.o $(ODIR)/robustmain.o
 
+PFREBSIM = $(BDIR)/pfrebsim
+PFREBSIM_OBJ = $(ODIR)/pfload.o $(ODIR)/pfworker.o $(ODIR)/pfsimul.o $(ODIR)/utilities.o $(ODIR)/rebengine.o
 
-all: $(ROB)
+REB = $(BDIR)/reb
+REB_OBJ = $(ODIR)/rebengine.o $(ODIR)/rebmain.o $(ODIR)/utilities.o
+
+all: $(ROB) $(REB) $(PFREBSIM)
 
 $(ODIR)/%.o: src/%.c
 	@echo compiling $*.c with $(CCC) $(CCCFLAGS)
@@ -33,7 +41,13 @@ $(ODIR)/%.o: src/%.c
 $(ROB): $(ROB_OBJ)
 	$(CCC) -o $(ROB) $(ROB_OBJ) $(CCCLNFLAGS)
 
+$(REB): $(REB_OBJ) 
+	$(CCC) -o $(REB) $(REB_OBJ) $(CCCLNFLAGS)
+
+$(PFREBSIM): $(PFREBSIM_OBJ)
+	$(CCC) -o $(PFREBSIM) $(PFREBSIM_OBJ) $(CCCLNFLAGS)
+
 clean:
-	rm $(ROB) -f
+	rm $(ROB) $(REB) $(PFREBSIM) -f
 	rm $(ODIR)/* -f
 

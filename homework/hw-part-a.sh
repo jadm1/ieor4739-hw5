@@ -1,4 +1,6 @@
 #!/bin/sh
 
-# bin/rpower data/q.txt -s 0 -q 1 -w 1 -r 10 -t 1e-6
-bin/covpca data/q.txt data/eigvals.txt data/eigvecs.txt -r 10 -t 1e-6
+cd runs
+../bin/rob ../data/input_rob.txt 0.0 0.2 0.2 x.txt
+cp x.txt ../data/x.txt
+
