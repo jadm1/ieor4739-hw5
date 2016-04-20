@@ -13,7 +13,7 @@ void portfolio_compute_qty_from_alloc(int n, int t, double B, double *q, double 
 
 
 int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B,
-		double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, GRBenv* env) {
+		double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, double *eps, GRBenv* env) {
 	int retcode = 0;
 	int i, j;
 	Portfolio *pf = NULL;
@@ -32,7 +32,7 @@ int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double
 	 */
 	memory = malloc(n*sizeof(double) +
 			n*t*sizeof(double) +
-			n*t*sizeof(double) +
+			n*sizeof(double) +
 			n*sizeof(double) +
 			n*sizeof(double)
 	);
@@ -41,8 +41,8 @@ int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double
 	}
 	pf->q = (double*)memory;
 	pf->p = (double*)&pf->q[n];
-	pf->pT = (double*)&pf->p[n*t];
-	pf->delta = (double*)&pf->pT[n*t];
+	pf->pt = (double*)&pf->p[n*t];
+	pf->delta = (double*)&pf->pt[n];
 	pf->sigma = (double*)&pf->delta[n];
 
 
@@ -52,7 +52,6 @@ int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < t; j++) {
 			pf->p[i*t + j] = p[i*t + j];
-			pf->pT[j*n + i] = p[i*t + j];
 		}
 	}
 	for (i = 0; i < n; i++) {
@@ -74,6 +73,9 @@ int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double
 
 	/** Initialize rebalancing data **/
 	pf->xstar = (double*)calloc(n, sizeof(double));
+	if (pf->xstar == NULL) {
+		retcode = NOMEMORY; goto BACK;
+	}
 	for (i = 0; i < n; i++) {
 		pf->xstar[i] = x[i];
 	}
@@ -106,7 +108,7 @@ int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double
 		printf("no memory\n"); retcode = 1; goto BACK;
 	}
 
-
+	pf->eps = eps;
 
 
 
@@ -173,7 +175,7 @@ void portfolio_delete(Portfolio **ppf) {
 
 
 int portfolio_create_array(int number, Portfolio*** pppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B,
-		double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, GRBenv* env) {
+		double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, double *eps, GRBenv* env) {
 	int retcode = 0;
 	int i;
 	Portfolio **ppf = NULL;
@@ -184,7 +186,7 @@ int portfolio_create_array(int number, Portfolio*** pppf, int n, int t, double *
 	}
 
 	for (i = 0; i < number; i++) {
-		retcode = portfolio_create(&ppf[i], n, t, x, p, delta, sigma, B, pf_values, pf_returns, pf_vars, reb_interval, env);
+		retcode = portfolio_create(&ppf[i], n, t, x, p, delta, sigma, B, pf_values, pf_returns, pf_vars, reb_interval, eps, env);
 		if (retcode != 0)
 			goto BACK;
 	}

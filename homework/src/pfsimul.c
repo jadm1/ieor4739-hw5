@@ -50,7 +50,10 @@ int main(int argc, char **argv) {
 	double *delta = NULL;
 	double *sigma = NULL;
 	int reb_interval;
+	double epsilon;
 	GRBenv   *env = NULL;
+	double *eps;
+	double zero;
 	/**
 	 * arrays for results
 	 */
@@ -78,13 +81,14 @@ int main(int argc, char **argv) {
 	or = 0;
 	ovar = 0;
 	reb_interval = 90;
-
+	epsilon = 0.0;
+	zero = 1e-9;
 
 	/**
 	 * Collect parameters from command line
 	 */
 	if(argc < 3) {
-		printf("usage: %s <portfolio positions file> <prices history file> [-q simulations number] [-w workers] [-p max periods] [-v verbose] [-b initial value] [-rp rebalance interval] [ -op avg values output file] [ -or avg returns output file] [ -ov avg vars output file] \n", argv[0]);
+		printf("usage: %s <portfolio positions file> <prices history file> [-q simulations number] [-w workers] [-p max periods] [-v verbose] [-b initial value] [-rp rebalance interval] [-re rebalance epsilon] [-z zero test threshold] [ -op avg values output file] [ -or avg returns output file] [ -ov avg vars output file] \n", argv[0]);
 		retcode = 1; goto BACK;
 	}
 	for(j = 3; j < argc; j++){
@@ -111,6 +115,14 @@ int main(int argc, char **argv) {
 		else if (0 == strcmp(argv[j],"-rp")) {
 			j += 1;
 			reb_interval = atoi(argv[j]);
+		}
+		else if (0 == strcmp(argv[j],"-re")) {
+			j += 1;
+			epsilon = atof(argv[j]);
+		}
+		else if (0 == strcmp(argv[j],"-z")) {
+			j += 1;
+			zero = atof(argv[j]);
 		}
 		else if (0 == strcmp(argv[j],"-op")){
 			j += 1;
@@ -142,7 +154,7 @@ int main(int argc, char **argv) {
 
 
 	printf("loading positions from %s\n", x_filename);
-	retcode = load_initial_positions(x_filename, &x, &n, &indices, 1e-10);
+	retcode = load_initial_positions(x_filename, &x, &n, &indices, zero);
 	if (retcode != 0) {
 		printf("positions could not be loaded !\n"); goto BACK;
 	}
@@ -165,7 +177,12 @@ int main(int argc, char **argv) {
 	}
 
 	printf("periods: %d\n", t);
-	printf("rebalance every %d periods\n", reb_interval);
+	if (reb_interval > 0) {
+		printf("rebalance every %d periods\n", reb_interval);
+	}
+	else {
+		printf("do not rebalance\n");
+	}
 
 	if (verbose) {
 		printf("prices loaded\n");
@@ -207,11 +224,19 @@ int main(int argc, char **argv) {
 	}
 	GRBsetparam(env, "OutputFlag", "0");
 
+	// set error tolerances for rebalancing
+	eps = (double*)calloc(n, sizeof(double));
+	if (eps == NULL) {
+		retcode = NOMEMORY; goto BACK;
+	}
+	for (j = 0; j<n; j++) {
+		eps[j] = epsilon;
+	}
 
 	/**
 	 * Creating portfolio array for every worker (no shared memory so we need to make numworkers copies of 1 portfolio)
 	 */
-	retcode = portfolio_create_array(num_workers, &ppf, n, t, x, p, delta, sigma, B, pf_values, pf_returns, pf_vars, reb_interval, env);
+	retcode = portfolio_create_array(num_workers, &ppf, n, t, x, p, delta, sigma, B, pf_values, pf_returns, pf_vars, reb_interval, eps, env);
 	if (retcode != 0)
 		goto BACK;
 
@@ -314,6 +339,7 @@ int main(int argc, char **argv) {
 	// free gurobi env
 	GRBfreeenv(env);
 
+	UTLFree((void**)&eps);
 	UTLFree((void**)&pf_vars);
 	UTLFree((void**)&pf_values);
 	UTLFree((void**)&pf_returns);

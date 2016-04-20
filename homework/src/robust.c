@@ -136,7 +136,15 @@ int robustengine(int numassets, int numfactors,
 		}
 	}
 	retcode = GRBaddqpterms(model, Nq, qrow, qcol, qval);
-	if (retcode) goto BACK;
+	if (retcode) {
+		printf("add qp terms failed!\n");
+		goto BACK;
+	}
+
+	retcode = GRBupdatemodel(model);
+	if (retcode != 0) {
+		goto BACK;
+	}
 
 	/** now we will add one constraint at a time **/
 	/** we need to have a couple of auxiliary arrays **/
@@ -182,7 +190,7 @@ int robustengine(int numassets, int numfactors,
 
 	/** constraint (10e) from writeup **/
 
-	retcode = GRBupdatemodel(model);
+
 
 	cval[0] = 1.0; cind[0] = numassets + numfactors; /** rho variable **/
 	count = 1;
@@ -284,7 +292,6 @@ int robustengine(int numassets, int numfactors,
 
 	GRBfreemodel(model);
 	GRBfreeenv(env);
-
 
 
 	BACK:

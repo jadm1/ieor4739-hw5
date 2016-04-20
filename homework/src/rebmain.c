@@ -11,6 +11,9 @@ int RBengine(int numassets, double *targetx, double *prices, double *shares);
 int RBrebalance_basic(int n, double *xstar, double *p, double *q,
 		GRBenv *env, char **grb_names, double* grb_x, double* grb_obj,
 		double* grb_ub, double* grb_lb, double* grb_cval, int* grb_cind);
+int RBrebalance_approx(int n, double *xstar, double *p, double *q, double* eps, double* pcost,
+		GRBenv *env, char **grb_names, double* grb_x, double* grb_obj,
+		double* grb_ub, double* grb_lb, double* grb_cval, int* grb_cind);
 
 /**
  * Test rebalancing
@@ -37,6 +40,10 @@ int main(int argc, char **argv)
 
 	printf("q: "); UTLShowVector(n, q);
 	retcode = RBengine(n, xstar, p, q);
+	if (retcode != 0) {
+		printf("error rebalance failed !\n");
+		goto BACK;
+	}
 	printf("q: "); UTLShowVector(n, q);
 
 
@@ -89,10 +96,12 @@ int RBengine(int n, double *xstar, double *p, double *q)
 	int retcode = 0;
 	int j;
 	double value;
+	double cost;
 
 	GRBenv   *env = NULL;
 
 
+	double *eps;
 	int grb_nvar;
 	char **grb_names;
 	double *grb_x, *grb_obj, *grb_ub, *grb_lb, *grb_cval;
@@ -149,15 +158,20 @@ int RBengine(int n, double *xstar, double *p, double *q)
 		printf("no memory\n"); retcode = 1; goto BACK;
 	}
 
+	eps = (double*)calloc(n, sizeof(double));
+	for (j = 0; j < n; j++) {
+		eps[j] = 0.00;
+	}
 
 
 
 	printf("Rebalancing...\n");
-	retcode = RBrebalance_basic(n, xstar, p, q, env, grb_names, grb_x, grb_obj, grb_ub, grb_lb, grb_cval, grb_cind);
+	//retcode = RBrebalance_basic(n, xstar, p, q, env, grb_names, grb_x, grb_obj, grb_ub, grb_lb, grb_cval, grb_cind);
+	retcode = RBrebalance_approx(n, xstar, p, q, eps, &cost, env, grb_names, grb_x, grb_obj, grb_ub, grb_lb, grb_cval, grb_cind);
 	if (retcode != 0) {
 		goto BACK;
 	}
-	printf("Done !\n");
+	printf("Done. Obj Val : %g\n", cost);
 
 
 

@@ -9,7 +9,7 @@ typedef struct Portfolio {
 	int t; /** number of periods **/
 	double B; /** initial portfolio value **/
 	double *p; /** Matrix of prices (unperturbed) (nxT) **/
-	double *pT; /** Transposed matrix (Txn) (to access p^t easily) **/
+	double *pt; /** vector of prices at time t (used in simulations) **/
 	double *q; /** Array of inital fixed quantities **/
 	double *delta; /** avg changes of prices **/
 	double *sigma; /** std changes of prices **/
@@ -20,6 +20,7 @@ typedef struct Portfolio {
 	GRBenv *env;
 
 	double *xstar; /** initial x**/
+	double *eps; /** error tolerances for rebalancing **/
 	int grb_nvar;
 	char **grb_names;
 	double *grb_x, *grb_obj, *grb_ub, *grb_lb, *grb_cval;
@@ -37,11 +38,11 @@ typedef struct WorkerBag {
 
 /** Functions from pfload.c **/
 /** portfolio_create allocates memory and initializes a portfolio bag structure from the given parameters  **/
-int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B, double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, GRBenv* env);
+int portfolio_create(Portfolio **ppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B, double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, double *eps, GRBenv* env);
 /** portfolio_delete deallocates memory of a portfolio bag structure **/
 void portfolio_delete(Portfolio **ppf);
 /** portfolio_create_array creates an array of number pointers to Portfolio bags and initializes them with the given parameters **/
-int portfolio_create_array(int number, Portfolio*** pppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B, double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, GRBenv* env);
+int portfolio_create_array(int number, Portfolio*** pppf, int n, int t, double *x, double *p, double *delta, double *sigma, double B, double *pf_values, double *pf_returns, double *pf_vars, int reb_interval, double *eps, GRBenv* env);
 /** portfolio_delete_array deletes an array of number pointers to Portfolio bags **/
 void portfolio_delete_array(int number, Portfolio ***pppf);
 

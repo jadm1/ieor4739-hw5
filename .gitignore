@@ -5,3 +5,8 @@ homework/.cproject
 homework/.project
 homework/.settings
 *.bat
+*.fuse*
+homework/runs/pf_values.txt
+homework/runs/pf_returns.txt
+homework/runs/pf_vars.txt
+

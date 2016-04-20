@@ -1,0 +1,79 @@
+loading positions from ../data/x.txt
+Portfolio assets: 449
+loading prices from ../data/p.txt
+periods: 504
+rebalance every 90 periods
+computing vector of averages of changes...
+computing vector std's of changes...
+Initial portfolio value: 9.99999e+08
+Launching thread for worker 0
+Launching thread for worker 1
+Launching thread for worker 2
+Worker 0 started. 25 sims assigned: from 0 to 24 
+Worker 1 started. 25 sims assigned: from 25 to 49 
+Launching thread for worker 3
+Worker 2 started. 25 sims assigned: from 50 to 74 
+Waiting for threads...
+Worker 3 started. 25 sims assigned: from 75 to 99 
+W 0: simulation 0, portfolio value: 1.24971e+09, avg daily return: 0.0458642 %
+W 2: simulation 50, portfolio value: 1.25237e+09, avg daily return: 0.0468401 %
+W 3: simulation 76, portfolio value: 1.25216e+09, avg daily return: 0.0458989 %
+W 1: simulation 26, portfolio value: 1.2529e+09, avg daily return: 0.0459389 %
+W 0: simulation 2, portfolio value: 1.25256e+09, avg daily return: 0.0469383 %
+W 2: simulation 52, portfolio value: 1.25148e+09, avg daily return: 0.0466125 %
+W 3: simulation 78, portfolio value: 1.25752e+09, avg daily return: 0.0468611 %
+W 1: simulation 28, portfolio value: 1.25643e+09, avg daily return: 0.0467969 %
+W 0: simulation 4, portfolio value: 1.25822e+09, avg daily return: 0.0470271 %
+W 2: simulation 54, portfolio value: 1.25231e+09, avg daily return: 0.0458952 %
+W 3: simulation 80, portfolio value: 1.25116e+09, avg daily return: 0.0458704 %
+W 1: simulation 30, portfolio value: 1.24556e+09, avg daily return: 0.0448384 %
+W 0: simulation 6, portfolio value: 1.24839e+09, avg daily return: 0.0460428 %
+W 2: simulation 56, portfolio value: 1.25652e+09, avg daily return: 0.0471483 %
+W 3: simulation 82, portfolio value: 1.24724e+09, avg daily return: 0.0460435 %
+W 1: simulation 32, portfolio value: 1.24688e+09, avg daily return: 0.0446829 %
+W 0: simulation 8, portfolio value: 1.2534e+09, avg daily return: 0.0458235 %
+W 2: simulation 58, portfolio value: 1.24402e+09, avg daily return: 0.0445342 %
+W 3: simulation 84, portfolio value: 1.24673e+09, avg daily return: 0.0449082 %
+W 1: simulation 34, portfolio value: 1.2547e+09, avg daily return: 0.0462012 %
+W 3: simulation 86, portfolio value: 1.2495e+09, avg daily return: 0.0456615 %
+W 2: simulation 60, portfolio value: 1.25176e+09, avg daily return: 0.046252 %
+W 0: simulation 10, portfolio value: 1.25744e+09, avg daily return: 0.0470873 %
+W 1: simulation 36, portfolio value: 1.25316e+09, avg daily return: 0.0461809 %
+W 3: simulation 88, portfolio value: 1.2469e+09, avg daily return: 0.0455969 %
+W 2: simulation 62, portfolio value: 1.25815e+09, avg daily return: 0.047854 %
+W 0: simulation 12, portfolio value: 1.25499e+09, avg daily return: 0.0470187 %
+W 1: simulation 38, portfolio value: 1.24507e+09, avg daily return: 0.0448912 %
+W 3: simulation 90, portfolio value: 1.25477e+09, avg daily return: 0.0478652 %
+W 2: simulation 64, portfolio value: 1.2491e+09, avg daily return: 0.0458227 %
+W 0: simulation 14, portfolio value: 1.25105e+09, avg daily return: 0.0456588 %
+W 3: simulation 92, portfolio value: 1.25703e+09, avg daily return: 0.046624 %
+W 1: simulation 40, portfolio value: 1.25669e+09, avg daily return: 0.0471804 %
+W 2: simulation 66, portfolio value: 1.25706e+09, avg daily return: 0.0465968 %
+W 0: simulation 16, portfolio value: 1.24582e+09, avg daily return: 0.0459548 %
+W 3: simulation 94, portfolio value: 1.25222e+09, avg daily return: 0.0465893 %
+W 1: simulation 42, portfolio value: 1.25315e+09, avg daily return: 0.046642 %
+W 2: simulation 68, portfolio value: 1.25249e+09, avg daily return: 0.0451308 %
+W 0: simulation 18, portfolio value: 1.25091e+09, avg daily return: 0.0460488 %
+W 3: simulation 96, portfolio value: 1.25006e+09, avg daily return: 0.0464588 %
+W 1: simulation 44, portfolio value: 1.24516e+09, avg daily return: 0.0449067 %
+W 2: simulation 70, portfolio value: 1.25073e+09, avg daily return: 0.0452485 %
+W 0: simulation 20, portfolio value: 1.25158e+09, avg daily return: 0.0464148 %
+W 3: simulation 98, portfolio value: 1.25701e+09, avg daily return: 0.0463015 %
+W 1: simulation 46, portfolio value: 1.25475e+09, avg daily return: 0.0464343 %
+W 2: simulation 72, portfolio value: 1.24401e+09, avg daily return: 0.0447068 %
+W 0: simulation 22, portfolio value: 1.24642e+09, avg daily return: 0.0454182 %
+W 1: simulation 48, portfolio value: 1.25416e+09, avg daily return: 0.0468582 %
+W 2: simulation 74, portfolio value: 1.25573e+09, avg daily return: 0.0478847 %
+W 0: simulation 24, portfolio value: 1.25106e+09, avg daily return: 0.0448581 %
+Thread 0 joined ...
+Thread 1 joined ...
+Thread 2 joined ...
+Thread 3 joined ...
+P&L simulations done in 178.4 seconds
+Averaging over all simulations
+Average final value: 1.25218e+09
+Average daily return: 0.0461731 %
+Average daily variance of return: 3.1355e-05
+saving values...
+saving returns...
+saving vars...

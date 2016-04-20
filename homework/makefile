@@ -2,8 +2,8 @@
 GCCOPT = gcc -O2 -funroll-loops
 GCCDEB = gcc -ggdb -Wall #-pedantic
 
-#CCC = $(GCCOPT)
-CCC = $(GCCDEB)
+CCC = $(GCCOPT)
+#CCC = $(GCCDEB)
 
 #GRB = /opt/gurobi/gurobi650/linux64
 GRB = /mnt/sda5/gurobi651/linux64
